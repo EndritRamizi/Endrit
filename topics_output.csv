@@ -1,0 +1,11 @@
+model,topic,top_words
+LDA,0,"hotel, staff, room, great, stay, location, breakfast, excellent, stayed, just"
+LDA,1,"beach, resort, food, great, did, good, pool, just, time, day"
+LDA,2,"room, great, hotel, nice, stay, view, bed, stayed, floor, new"
+LDA,3,"room, hotel, did, night, stay, desk, service, rooms, day, told"
+LDA,4,"hotel, great, good, location, nice, clean, rooms, stay, staff, room"
+NMF,0,"hotel, staff, stay, excellent, stayed, recommend, wonderful, helpful, lovely, best"
+NMF,1,"resort, beach, food, pool, people, did, time, good, beautiful, just"
+NMF,2,"room, did, night, desk, bed, floor, stay, bathroom, view, hotel"
+NMF,3,"good, walk, hotel, breakfast, station, nice, location, clean, value, small"
+NMF,4,"great, location, great location, hotel great, great hotel, place, stay, location great, staff, friendly"
