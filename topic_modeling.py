@@ -57,12 +57,11 @@ def clean_text(text: str) -> str:
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
-def tokenize_and_lemmatize(text: str, lemmatizer: WordNetLemmatizer, stopwords: set[str]) -> List[str]:
-    # simple tokenization on whitespace (works well after clean_text)
+def tokenize_and_lemmatize(text, lemmatizer, stopwords):
     tokens = text.split()
     tokens = [t for t in tokens if t.isalpha() and len(t) > 2 and t not in stopwords]
-    lemmas = [lemmatizer.lemmatize(t) for t in tokens]
-    return lemmas
+    return tokens
+
 
 def preprocess_corpus(texts: List[str]) -> Tuple[List[str], List[List[str]]]:
     """
@@ -70,8 +69,8 @@ def preprocess_corpus(texts: List[str]) -> Tuple[List[str], List[List[str]]]:
       cleaned_docs: list of cleaned+lemmatized docs (strings)
       tokenized_docs: list of token lists (for Word2Vec)
     """
-    ensure_nltk()
-    lemmatizer = WordNetLemmatizer()
+    lemmatizer = None
+
     stopwords = set(ENGLISH_STOP_WORDS)
 
     tokenized_docs: List[List[str]] = []
@@ -112,7 +111,7 @@ def build_word2vec_doc_vectors(tokenized_docs: List[List[str]], vector_size: int
         vector_size=vector_size,
         window=window,
         min_count=3,
-        workers=4,
+        workers=1,
         sg=1,  # skip-gram
         epochs=10,
     )
