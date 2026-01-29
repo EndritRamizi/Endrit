@@ -199,6 +199,32 @@ def main():
     count_vec, X_count, lda = fit_lda(docs, n_topics=5)
     lda_topics = top_words_per_topic(lda, count_vec.get_feature_names_out(), n_top_words=10)
 
+        # ---------- LDA STATISTICS ----------
+    lda_doc_topics = lda.transform(X_count)
+
+    lda_strength = lda_doc_topics.mean(axis=0)
+
+    lda_stats = pd.DataFrame({
+        "topic_id": range(len(lda_strength)),
+        "mean_probability": lda_strength
+    }).sort_values(by="mean_probability", ascending=False)
+
+    lda_dominant = lda_doc_topics.argmax(axis=1)
+
+    lda_percent = (
+        pd.Series(lda_dominant)
+        .value_counts(normalize=True)
+        .mul(100)
+        .reset_index()
+    )
+    lda_percent.columns = ["topic_id", "percentage_of_reviews"]
+
+    lda_stats.to_csv("lda_topic_stats.csv", index=False)
+    lda_percent.to_csv("lda_dominance.csv", index=False)
+
+    print("\nSaved: lda_topic_stats.csv, lda_dominance.csv")
+
+    
     print("\n=== LDA Topics (top words) ===")
     for k, words in lda_topics.items():
         print(f"Topic {k}: {', '.join(words)}")
@@ -206,6 +232,30 @@ def main():
     # Topic model 2: NMF
     nmf, W = fit_nmf(X_tfidf, n_topics=5)
     nmf_topics = top_words_per_topic(nmf, tfidf_vec.get_feature_names_out(), n_top_words=10)
+
+        # ---------- NMF STATISTICS ----------
+    nmf_strength = W.mean(axis=0)
+
+    nmf_stats = pd.DataFrame({
+        "topic_id": range(len(nmf_strength)),
+        "mean_weight": nmf_strength
+    }).sort_values(by="mean_weight", ascending=False)
+
+    nmf_dominant = W.argmax(axis=1)
+
+    nmf_percent = (
+        pd.Series(nmf_dominant)
+        .value_counts(normalize=True)
+        .mul(100)
+        .reset_index()
+    )
+    nmf_percent.columns = ["topic_id", "percentage_of_reviews"]
+
+    nmf_stats.to_csv("nmf_topic_stats.csv", index=False)
+    nmf_percent.to_csv("nmf_dominance.csv", index=False)
+
+    print("\nSaved: nmf_topic_stats.csv, nmf_dominance.csv")
+
 
     print("\n=== NMF Topics (top words) ===")
     for k, words in nmf_topics.items():
